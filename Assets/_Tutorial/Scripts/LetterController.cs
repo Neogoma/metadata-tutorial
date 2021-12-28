@@ -15,8 +15,6 @@ public class LetterController : MonoBehaviour
     
     private PersistentObject currentPersistentObject;
 
-   // public ObjectData objData;
- 
     public void OpenEditor()
     {
         editorCanvas.SetActive(true);
@@ -25,7 +23,6 @@ public class LetterController : MonoBehaviour
     public void CloseEditor()
     {
         editorCanvas.SetActive(false);
-
     }
     public void SaveText()
     {
@@ -33,13 +30,9 @@ public class LetterController : MonoBehaviour
 
         if (currentPersistentObject != null)
         {
-            //objData.description = "This is an Example";
-            //objData.color = Color.red;
-            // string meta = JsonUtility.ToJson(objData);
             currentPersistentObject.metadata = letterText.text;
             ObjectController.Instance.SaveModel(currentPersistentObject);
         }
-       
     }
 
     public void LoadText(PersistentObject persistentObject)
@@ -47,9 +40,7 @@ public class LetterController : MonoBehaviour
         currentPersistentObject = persistentObject;
         if (persistentObject.metadata != null)
         {
-            //ObjectData objData = JsonUtility.FromJson<ObjectData>(persistentObject.metadata);
-            //Color color = objData.color;
-            letterText.text = currentPersistentObject.metadata;
+             letterText.text = currentPersistentObject.metadata;
         }
         else //if meta is null
         {
@@ -58,10 +49,4 @@ public class LetterController : MonoBehaviour
     }
 
 }
-//[System.Serializable]
-//public class ObjectData
-//{
-//    public string description;
-//    public Color color;
-//}
 
