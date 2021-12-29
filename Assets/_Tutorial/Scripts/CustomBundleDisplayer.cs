@@ -1,5 +1,6 @@
 using com.Neogoma.Stardust.API.Persistence;
 using com.Neogoma.Stardust.Datamodel;
+using com.Neogoma.Stardust.Metadata;
 using UnityEngine;
 
 namespace com.Neogoma.Stardust.Bundle
@@ -23,7 +24,6 @@ namespace com.Neogoma.Stardust.Bundle
         protected override void ObjectLoadedSucessfully(GameObject obj)
         {
             progressBg.SetActive(false);
-            Debug.Log(obj.name);
             InitObject(CurrentPersistenceModel);
         }
         ///<inheritdoc/>
@@ -41,8 +41,11 @@ namespace com.Neogoma.Stardust.Bundle
 
 
         /// <summary>
-        /// Initialize gameobject.
+        /// Called when we finish loading an object successfully.
+        /// Checks if the bundle holder prefab contains, in it's child objects the gameObject with
+        /// the Letter Controller component we are looking for and Loads text passing a reference to the correct object.
         /// </summary>
+        /// <param name="persistenObject"> The Loaded Object</param>
         public void InitObject(PersistentObject persistenObject)
         {
             if(GetComponentInChildren<LetterController>() != null)
