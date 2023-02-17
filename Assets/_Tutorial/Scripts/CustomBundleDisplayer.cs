@@ -1,6 +1,7 @@
 using com.Neogoma.Stardust.API.Persistence;
 using com.Neogoma.Stardust.Datamodel;
 using com.Neogoma.Stardust.Metadata;
+using Siccity.GLTFUtility;
 using UnityEngine;
 
 namespace com.Neogoma.Stardust.Bundle
@@ -20,11 +21,33 @@ namespace com.Neogoma.Stardust.Bundle
         protected override void ObjectLoadedFailure()
         {
         }
+
+        protected override GameObject LoadGLBFile(string filepath)
+        {
+            ImportSettings settings = new ImportSettings();
+            settings.useLegacyClips = true;
+            AnimationClip[] animations;
+            GameObject loadedObject = Importer.LoadFromFile(filepath, settings, out animations, Format.AUTO);
+
+            if (animations.Length > 0)
+            {
+                Animation anim = loadedObject.AddComponent<Animation>();
+                animations[0].legacy = true;
+                anim.AddClip(animations[0], animations[0].name);
+                anim.clip = anim.GetClip(animations[0].name);
+                anim.wrapMode = WrapMode.Loop;
+                anim.Play();
+            }
+
+
+            return loadedObject;
+        }
+
         ///<inheritdoc/>
-        protected override void ObjectLoadedSucessfully(GameObject obj)
+        protected override void ObjectLoadedSucessfully(GameObject obj,PersistentObject persistentObject)
         {
             progressBg.SetActive(false);
-            InitObject(CurrentPersistenceModel);
+            InitObject(persistentObject);
         }
         ///<inheritdoc/>
         protected override void ObjectNotAvailable()
@@ -58,5 +81,7 @@ namespace com.Neogoma.Stardust.Bundle
                 Debug.Log("couldnt find required component");
             }
         }
+
+       
     }
 }
